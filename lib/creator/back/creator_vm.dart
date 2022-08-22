@@ -1,5 +1,6 @@
 import 'package:creator/creator/back/elemets_lists.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cube/flutter_cube.dart';
 
 import '../front/animated_button.dart';
 
@@ -11,9 +12,13 @@ class CreatorVM extends ChangeNotifier {
 
   late SelectedEnum selectedEnum;
 
+  Object selectedNecklace = Object(fileName: 'assets/elements/11788_Necklace_l2.obj');
+
+
   Color chainColor = Colors.white;
   Color plusColor = Colors.white;
   Color pendantColor = Colors.black;
+
 
   Future<List<Image>> initAssets() async {
     List<Image> list = selectedList.map((e) => e.image).toList();
