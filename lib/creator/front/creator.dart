@@ -1,27 +1,24 @@
-
-import 'package:creator/creator/front/animated_button.dart';
 import 'package:creator/creator/front/radio_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cube/flutter_cube.dart' as cube;
-import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:stacked/stacked.dart';
 import 'package:radio_grouped_buttons/radio_grouped_buttons.dart';
 import 'package:flutter_cube/flutter_cube.dart';
 
 import '../back/creator_vm.dart';
+import '../back/items_lists.dart';
 
 class Creator extends StatelessWidget {
   const Creator({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CreatorVM>.reactive(
       viewModelBuilder: () => CreatorVM(),
       onModelReady: ((model) async {
-        List<AnimatedItem> chain = model.initChains();
-        model.selectedList = chain;
-        await model.initAssets();
+        model.selectedList = pendantItems;
+        model.selectedPendant = pendantItems[0];
+        await model.initImages();
       }),
       builder: (context, viewModel, child) => SafeArea(
         child: Scaffold(
@@ -38,22 +35,20 @@ class Creator extends StatelessWidget {
                         width: 400,
                         child: Cube(
                           onSceneCreated: (Scene scene) {
-                              viewModel.mainScene = scene;
+                            viewModel.mainScene = scene;
 
-                              viewModel.selectedNecklace.object = cube.Object(
-                              fileName: viewModel.selectedNecklace.fileName,
-                              scale:
-                                  viewModel.selectedNecklace.object.scale * 12,
+                            viewModel.selectedPendant.object = cube.Object(
+                              fileName: viewModel.selectedPendant.fileName,
+                              scale: viewModel.selectedPendant.object.scale,
                             );
 
-                            scene.world.add(viewModel.selectedNecklace.object);
+                            scene.world.add(viewModel.selectedPendant.object);
                           },
                         )),
                   ),
                 ),
-
                 const Spacer(),
-                const Align(
+                Align(
                     alignment: Alignment.topRight,
                     child: Padding(
                         padding: EdgeInsets.all(50), child: RadioWidget())),
@@ -70,28 +65,26 @@ class Creator extends StatelessWidget {
                       height: 350,
                       child: CustomRadioButton(
                         buttonLables: viewModel.selectedList
-                            .map((e) => e.image.toString())
+                            .map((e) => e.imageName)
                             .toList(),
                         buttonValues: viewModel.selectedList,
-                        images:
-                            viewModel.selectedList.map((e) => e.image).toList(),
+                        images: viewModel.selectedImages,
                         imagesWidth: 80,
                         imagesHeight: 80,
                         radioButtonValue: (value, index) {
                           viewModel.mainScene.world
-                              .remove(viewModel.selectedNecklace.object);
+                              .remove(viewModel.selectedPendant.object);
 
-                          viewModel
-                              .setNecklace(viewModel.selectedList[index].item);
+                          viewModel.setPendant(viewModel.selectedList[index]);
 
                           viewModel.mainScene.world
-                              .add(viewModel.selectedNecklace.object);
+                              .add(viewModel.selectedList[index].object);
                           viewModel.mainScene.update();
                         },
                         enableShape: true,
                         buttonSpace: 5,
                         buttonColor: Colors.white,
-                        selectedColor: Colors.cyan,
+                        selectedColor: Colors.black,
                         buttonWidth: 150,
                         buttonHeight: 80,
                       ),

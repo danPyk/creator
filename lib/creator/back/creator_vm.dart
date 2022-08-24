@@ -1,75 +1,82 @@
 import 'package:creator/creator/back/item.dart';
+import 'package:creator/creator/back/items_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cube/flutter_cube.dart' as cube;
 
-import '../front/animated_button.dart';
 
-enum SelectedEnum { chain, plus, pendant }
+enum SelectedItem { chain, plus, pendant }
 
 class CreatorVM extends ChangeNotifier {
-  late List<AnimatedItem> selectedList  ;
-  late Image selectedElement;
+  late List<Item> selectedList;
+  late List<Image>? selectedImages;
 
-  late VoidCallback voidCallback ;
 
-  late SelectedEnum selectedEnum;
-  late cube.Scene mainScene ;
+  late SelectedItem selectedEnum;
+  late cube.Scene mainScene;
 
-  Item selectedNecklace = Item(name: 'neklace', fileName: 'assets/elements/11788_Necklace_l2.obj', object: cube.Object(fileName: 'assets/elements/11788_Necklace_l2.obj'));
-  late List<AnimatedItem> chainItems;
-  void setNecklace(Item newNecklace) {
-    Item item = Item(name: newNecklace.name, fileName: newNecklace.fileName, object: newNecklace.object);
-    selectedNecklace = item;
+  late Item selectedChain ;
+  late Item selectedPendant ;
 
+  void setPendant(Item newNecklace) {
+    Item item = Item(
+        typeName: newNecklace.typeName,
+        fileName: newNecklace.fileName,
+        object: newNecklace.object,
+        scale: newNecklace.scale,
+        imageName: newNecklace.imageName);
+    selectedPendant = item;
 
     notifyListeners();
   }
 
-  Color chainColor = Colors.white;
-  Color plusColor = Colors.white;
-  Color pendantColor = Colors.black;
+  Future<void> initImages() async {
+    List<Image>? list = selectedList.map((e) => Image.asset(e.imageName)).toList();
+    selectedImages = list;
 
-  Future<List<Image>> initAssets() async {
-     List<Image> list = selectedList.map((e) => e.image).toList();
-
-    return list;
   }
 
-  void setEnum(SelectedEnum newEnum) {
+  void setEnum(SelectedItem newEnum) {
     selectedEnum = newEnum;
 
     notifyListeners();
   }
 
-  void updateElementsList(SelectedEnum? selectQueryType) {
-    if (selectQueryType == SelectedEnum.chain) {
+  void updateElementsList(SelectedItem? selectQueryType) {
+    if (selectQueryType == SelectedItem.chain) {
       selectedList = chainItems;
     }
 
-    if (selectQueryType == SelectedEnum.plus) {
+    if (selectQueryType == SelectedItem.plus) {
       selectedList = plusItems;
     }
 
-    if (selectQueryType == SelectedEnum.pendant) {
+    if (selectQueryType == SelectedItem.pendant) {
       selectedList = pendantItems;
     }
 
     notifyListeners();
   }
 
-  void updateRightButton(SelectedEnum? selectQueryType) {
-    if (selectQueryType == SelectedEnum.chain) {
+  ///right radio btn
+
+  Color chainColor = Colors.white;
+  Color plusColor = Colors.white;
+  Color pendantColor = Colors.black;
+
+
+  void updateRightButton(SelectedItem? selectQueryType) {
+    if (selectQueryType == SelectedItem.chain) {
       chainColor = Colors.black;
       pendantColor = Colors.white;
 
       plusColor = Colors.white;
     }
-    if (selectQueryType == SelectedEnum.plus) {
+    if (selectQueryType == SelectedItem.plus) {
       plusColor = Colors.black;
       chainColor = Colors.white;
       pendantColor = Colors.white;
     }
-    if (selectQueryType == SelectedEnum.pendant) {
+    if (selectQueryType == SelectedItem.pendant) {
       pendantColor = Colors.black;
       chainColor = Colors.white;
       plusColor = Colors.white;
@@ -77,41 +84,4 @@ class CreatorVM extends ChangeNotifier {
 
     notifyListeners();
   }
-
-  List<AnimatedItem> initChains() {
-     chainItems = [
-
-      AnimatedItem(
-        onPressed: () => null,
-
-        image: Image.asset('assets/elements/chain2.png'),
-        item: Item(name: 'neklace', fileName: 'assets/elements/11788_Necklace_l2.obj', object: cube.Object(fileName: 'assets/elements/11788_Necklace_l2.obj'))
-,      ),
-       AnimatedItem(
-         onPressed: () => null,
-
-         image: Image.asset('assets/elements/11776.png'),
-         item: Item(name: 'neklace', fileName: 'assets/elements/11788_Necklace_l2.obj', object: cube.Object(fileName: 'assets/elements/11776_Necklace_v1_L3.obj')),
-       ),
-    ];
-     return chainItems;
-  }
-
-  List<AnimatedItem> plusItems = [
-    AnimatedItem(
-      onPressed: () => null,
-      image: Image.asset('assets/elements/11776.png'),
-      item: Item(name: 'neklace', fileName: 'assets/elements/11788_Necklace_l2.obj', object: cube.Object(fileName: 'assets/elements/11788_Necklace_l2.obj'))
-    ),
-  ];
-
-  List<AnimatedItem> pendantItems = [
-    AnimatedItem(
-      onPressed: () => null,
-      image: Image.asset('assets/elements/11776.png'),
-      item: Item(name: 'neklace', fileName: 'assets/elements/11788_Necklace_l2.obj', object: cube.Object(fileName: 'assets/elements/11788_Necklace_l2.obj'))
-    ),
-  ];
-
-
 }

@@ -6,7 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
 class RadioWidget extends ViewModelWidget<CreatorVM> {
-  const RadioWidget({Key? key}) : super(key: key);
+   RadioWidget({Key? key}) : super(key: key);
+
+
+
+
 
   @override
   Widget build(BuildContext context, CreatorVM viewModel) {
@@ -31,7 +35,7 @@ class RadioWidget extends ViewModelWidget<CreatorVM> {
                 'Pendant',
                 () {
 
-                  viewModel.setEnum(SelectedEnum.pendant);
+                  viewModel.setEnum(SelectedItem.pendant);
 
                   viewModel.updateRightButton(viewModel.selectedEnum);
                   viewModel.updateElementsList(viewModel.selectedEnum);
@@ -44,7 +48,7 @@ class RadioWidget extends ViewModelWidget<CreatorVM> {
                   'Chain',
                   () {
 
-                    viewModel.setEnum(SelectedEnum.chain);
+                    viewModel.setEnum(SelectedItem.chain);
                     viewModel.updateRightButton(viewModel.selectedEnum);
                     viewModel.updateElementsList(viewModel.selectedEnum);
 
@@ -56,7 +60,7 @@ class RadioWidget extends ViewModelWidget<CreatorVM> {
                 'Plus',
                 () {
 
-                  viewModel.setEnum(SelectedEnum.plus);
+                  viewModel.setEnum(SelectedItem.plus);
 
                   viewModel.updateRightButton(viewModel.selectedEnum);
                   viewModel.updateElementsList(viewModel.selectedEnum);
