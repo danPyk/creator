@@ -1,8 +1,8 @@
 import 'package:creator/creator/back/creator_vm.dart';
+import 'package:creator/creator/back/item.dart';
 import 'package:creator/creator/front/radio_button.dart';
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
 import 'package:stacked/stacked.dart';
 
 class RadioWidget extends ViewModelWidget<CreatorVM> {
@@ -35,10 +35,10 @@ class RadioWidget extends ViewModelWidget<CreatorVM> {
                 'Pendant',
                 () {
 
-                  viewModel.setEnum(SelectedItem.pendant);
+                  viewModel.setItemType(ItemType.pendant);
 
-                  viewModel.updateRightButton(viewModel.selectedEnum);
-                  viewModel.updateElementsList(viewModel.selectedEnum);
+                  viewModel.updateRightButton(viewModel.selectedItemType);
+                  viewModel.updateElementsList(viewModel.selectedItemType);
                 },
                 color: viewModel.pendantColor,
               ),
@@ -48,9 +48,9 @@ class RadioWidget extends ViewModelWidget<CreatorVM> {
                   'Chain',
                   () {
 
-                    viewModel.setEnum(SelectedItem.chain);
-                    viewModel.updateRightButton(viewModel.selectedEnum);
-                    viewModel.updateElementsList(viewModel.selectedEnum);
+                    viewModel.setItemType(ItemType.chain);
+                    viewModel.updateRightButton(viewModel.selectedItemType);
+                    viewModel.updateElementsList(viewModel.selectedItemType);
 
                   },
                   color: viewModel.chainColor,
@@ -60,10 +60,10 @@ class RadioWidget extends ViewModelWidget<CreatorVM> {
                 'Plus',
                 () {
 
-                  viewModel.setEnum(SelectedItem.plus);
+                  viewModel.setItemType(ItemType.plus);
 
-                  viewModel.updateRightButton(viewModel.selectedEnum);
-                  viewModel.updateElementsList(viewModel.selectedEnum);
+                  viewModel.updateRightButton(viewModel.selectedItemType);
+                  viewModel.updateElementsList(viewModel.selectedItemType);
 
                 },
                 color: viewModel.plusColor,

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cube/flutter_cube.dart' as cube;
 
+
+enum ItemType { chain, plus, pendant }
+
+
 class Item {
-   String typeName;
+   ItemType type;
    String fileName;
    cube.Object object;
    double scale;
@@ -10,5 +14,5 @@ class Item {
 
 
 
-  Item({required this.typeName, required this.fileName, required this.object,  required this.scale, required this.imageName});
+  Item({required this.type, required this.fileName, required this.object,  required this.scale, required this.imageName});
 }

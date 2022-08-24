@@ -17,7 +17,6 @@ class Creator extends StatelessWidget {
       viewModelBuilder: () => CreatorVM(),
       onModelReady: ((model) async {
         model.selectedList = pendantItems;
-        model.selectedPendant = pendantItems[0];
         await model.initImages();
       }),
       builder: (context, viewModel, child) => SafeArea(
@@ -30,17 +29,14 @@ class Creator extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8),
-                    child: Container(
+                    child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.7,
                         width: 400,
+
+                        //todo loading spinning
                         child: Cube(
                           onSceneCreated: (Scene scene) {
                             viewModel.mainScene = scene;
-
-                            viewModel.selectedPendant.object = cube.Object(
-                              fileName: viewModel.selectedPendant.fileName,
-                              scale: viewModel.selectedPendant.object.scale,
-                            );
 
                             scene.world.add(viewModel.selectedPendant.object);
                           },
@@ -51,7 +47,7 @@ class Creator extends StatelessWidget {
                 Align(
                     alignment: Alignment.topRight,
                     child: Padding(
-                        padding: EdgeInsets.all(50), child: RadioWidget())),
+                        padding: const EdgeInsets.all(50), child: RadioWidget())),
               ],
             ),
             Expanded(
@@ -60,7 +56,7 @@ class Creator extends StatelessWidget {
                 child: ListView(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       width: MediaQuery.of(context).size.width,
                       height: 350,
                       child: CustomRadioButton(
@@ -74,11 +70,13 @@ class Creator extends StatelessWidget {
                         radioButtonValue: (value, index) {
                           viewModel.mainScene.world
                               .remove(viewModel.selectedPendant.object);
+                          cube.Object scaledObj =
+                              viewModel.createScaledItem(index);
 
-                          viewModel.setPendant(viewModel.selectedList[index]);
+                          viewModel.selectedPendant.object = scaledObj;
 
-                          viewModel.mainScene.world
-                              .add(viewModel.selectedList[index].object);
+                          viewModel.mainScene.world.add(scaledObj);
+
                           viewModel.mainScene.update();
                         },
                         enableShape: true,
