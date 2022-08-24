@@ -1,21 +1,28 @@
+
 import 'package:creator/creator/front/animated_button.dart';
 import 'package:creator/creator/front/radio_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cube/flutter_cube.dart';
+import 'package:flutter_cube/flutter_cube.dart' as cube;
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:stacked/stacked.dart';
 import 'package:radio_grouped_buttons/radio_grouped_buttons.dart';
+import 'package:flutter_cube/flutter_cube.dart';
 
 import '../back/creator_vm.dart';
 
 class Creator extends StatelessWidget {
   const Creator({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CreatorVM>.reactive(
       viewModelBuilder: () => CreatorVM(),
-      onModelReady: ((model) => model.initAssets()),
+      onModelReady: ((model) async {
+        List<AnimatedItem> chain = model.initChains();
+        model.selectedList = chain;
+        await model.initAssets();
+      }),
       builder: (context, viewModel, child) => SafeArea(
         child: Scaffold(
             body: Column(
@@ -25,20 +32,26 @@ class Creator extends StatelessWidget {
                 Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 8, top: 8, bottom: 8),
+                    padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8),
                     child: Container(
                         height: MediaQuery.of(context).size.height * 0.7,
                         width: 400,
                         child: Cube(
                           onSceneCreated: (Scene scene) {
-                            scene.world.add(Object(fileName: 'assets/elements/11788_Necklace_l2.obj', scale:
-                            viewModel.selectedNecklace.scale * 12,
-                            ));
+                              viewModel.mainScene = scene;
+
+                              viewModel.selectedNecklace.object = cube.Object(
+                              fileName: viewModel.selectedNecklace.fileName,
+                              scale:
+                                  viewModel.selectedNecklace.object.scale * 12,
+                            );
+
+                            scene.world.add(viewModel.selectedNecklace.object);
                           },
                         )),
                   ),
                 ),
+
                 const Spacer(),
                 const Align(
                     alignment: Alignment.topRight,
@@ -65,7 +78,15 @@ class Creator extends StatelessWidget {
                         imagesWidth: 80,
                         imagesHeight: 80,
                         radioButtonValue: (value, index) {
-                          viewModel.paintItem(viewModel.selectedList[index]);
+                          viewModel.mainScene.world
+                              .remove(viewModel.selectedNecklace.object);
+
+                          viewModel
+                              .setNecklace(viewModel.selectedList[index].item);
+
+                          viewModel.mainScene.world
+                              .add(viewModel.selectedNecklace.object);
+                          viewModel.mainScene.update();
                         },
                         enableShape: true,
                         buttonSpace: 5,

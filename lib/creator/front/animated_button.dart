@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../back/item.dart';
+
 class AnimatedItem extends StatefulWidget {
   final Function onPressed;
   final double? minWidth;
   final Image image;
+  final Item item;
 
-  const AnimatedItem( {Key? key,   required this.onPressed, required this.image, this.minWidth,}) : super(key: key);
+  const AnimatedItem( {Key? key,   required this.onPressed, required this.image, this.minWidth, required this.item,}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AnimatedItemState();
