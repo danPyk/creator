@@ -6,13 +6,15 @@ enum ItemType { chain, plus, pendant }
 
 
 class Item {
-   ItemType type;
-   String fileName;
-   cube.Object object;
-   double scale;
-   String imageName;
+   final ItemType type;
+   final  String fileName;
+   final cube.Object object;
+   final double scale;
+   final String imageName;
 
 
 
-  Item({required this.type, required this.fileName, required this.object,  required this.scale, required this.imageName});
+  const Item.immutable({required this.type, required this.fileName, required this.object,  required this.scale, required this.imageName});
+
+   Item({required this.type, required this.fileName, required this.object,  required this.scale, required this.imageName});
 }

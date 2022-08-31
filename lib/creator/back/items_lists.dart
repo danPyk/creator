@@ -5,7 +5,7 @@ import 'item.dart';
 
 
 List<Item> plusItems = [
-  Item(
+  Item.immutable(
       type: ItemType.plus,
       fileName: 'assets/elements/chain/11788_Necklace_l2.obj',
       object: cube.Object(
@@ -14,32 +14,32 @@ List<Item> plusItems = [
       imageName: 'assets/elements/chain2.png'),
 ];
 
-List<Item> pendantItems = [
-  Item(
+ List<Item> pendantItems = [
+   Item.immutable(
       type: ItemType.pendant,
       fileName: 'assets/elements/pendants/15527_WineGlassPendant_Penguin_v1.obj',
       object: cube.Object(
           fileName: 'assets/elements/pendants/15527_WineGlassPendant_Penguin_v1.obj'),
-      scale: 2,
-      imageName: 'assets/elements/chain2.png'),
-  Item(
+      scale: 6,
+      imageName: 'assets/elements/pendants/pendant_key_bump.jpg'),
+   Item.immutable(
       type: ItemType.pendant,
       fileName: 'assets/elements/pendants/11797_Pendant_v1_l2.obj',
       object: cube.Object(
           fileName: 'assets/elements/pendants/11797_Pendant_v1_l2.obj'),
       scale: 5,
-      imageName: 'assets/elements/chain2.png'),
+      imageName: 'assets/elements/pendants/sample.png'),
 ];
 
 List<Item> chainItems = [
-  Item(
+  Item.immutable(
       type: ItemType.chain,
       fileName: 'assets/elements/chain/11788_Necklace_l2.obj',
       object: cube.Object(
           fileName: 'assets/elements/chain/11788_Necklace_l2.obj'),
-      scale: 5,
+      scale: 8,
       imageName: 'assets/elements/chain2.png'),
-  Item(
+  Item.immutable(
       type: ItemType.chain,
       fileName: 'assets/elements/chain/11776_Necklace_v1_L3.obj',
       object: cube.Object(

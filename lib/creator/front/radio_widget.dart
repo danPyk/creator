@@ -3,17 +3,40 @@ import 'package:creator/creator/back/item.dart';
 import 'package:creator/creator/front/radio_button.dart';
 import 'package:flutter/material.dart';
 
-import 'package:stacked/stacked.dart';
+class RadioWidget extends StatefulWidget {
+  final CreatorVM viewModel;
 
-class RadioWidget extends ViewModelWidget<CreatorVM> {
-   RadioWidget({Key? key}) : super(key: key);
-
-
-
-
+  const RadioWidget({Key? key, required this.viewModel}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, CreatorVM viewModel) {
+  State<StatefulWidget> createState() => RadioWidgetState();
+}
+
+Color chainColor = Colors.white;
+Color plusColor = Colors.white;
+Color pendantColor = Colors.black;
+
+void updateButtonColor(ItemType? selectQueryType) {
+  if (selectQueryType == ItemType.chain) {
+    chainColor = Colors.black;
+    pendantColor = Colors.white;
+    plusColor = Colors.white;
+  }
+  if (selectQueryType == ItemType.plus) {
+    plusColor = Colors.black;
+    chainColor = Colors.white;
+    pendantColor = Colors.white;
+  }
+  if (selectQueryType == ItemType.pendant) {
+    pendantColor = Colors.black;
+    chainColor = Colors.white;
+    plusColor = Colors.white;
+  }
+}
+
+class RadioWidgetState extends State<RadioWidget> {
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding:
           const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 4.0),
@@ -34,39 +57,42 @@ class RadioWidget extends ViewModelWidget<CreatorVM> {
               RadioButton(
                 'Pendant',
                 () {
+                  widget.viewModel.setItemType(ItemType.pendant);
 
-                  viewModel.setItemType(ItemType.pendant);
+                  updateButtonColor(widget.viewModel.selectedItemType);
+                  widget.viewModel
+                      .updateElementsList(widget.viewModel.selectedItemType);
+                  widget.viewModel.initImages();
 
-                  viewModel.updateRightButton(viewModel.selectedItemType);
-                  viewModel.updateElementsList(viewModel.selectedItemType);
                 },
-                color: viewModel.pendantColor,
+                color: pendantColor,
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: RadioButton(
                   'Chain',
                   () {
-
-                    viewModel.setItemType(ItemType.chain);
-                    viewModel.updateRightButton(viewModel.selectedItemType);
-                    viewModel.updateElementsList(viewModel.selectedItemType);
-
+                    widget.viewModel.setItemType(ItemType.chain);
+                    updateButtonColor(widget.viewModel.selectedItemType);
+                    widget.viewModel
+                        .updateElementsList(widget.viewModel.selectedItemType);
+                    widget.viewModel.initImages();
                   },
-                  color: viewModel.chainColor,
+                  color: chainColor,
                 ),
               ),
               RadioButton(
                 'Plus',
                 () {
+                  widget.viewModel.setItemType(ItemType.plus);
 
-                  viewModel.setItemType(ItemType.plus);
-
-                  viewModel.updateRightButton(viewModel.selectedItemType);
-                  viewModel.updateElementsList(viewModel.selectedItemType);
+                  updateButtonColor(widget.viewModel.selectedItemType);
+                  widget.viewModel
+                      .updateElementsList(widget.viewModel.selectedItemType);
+                  widget.viewModel.initImages();
 
                 },
-                color: viewModel.plusColor,
+                color: plusColor,
               ),
             ],
           ),

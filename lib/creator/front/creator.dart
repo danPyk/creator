@@ -1,3 +1,4 @@
+import 'package:creator/creator/back/item.dart';
 import 'package:creator/creator/front/radio_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cube/flutter_cube.dart' as cube;
@@ -15,9 +16,9 @@ class Creator extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<CreatorVM>.reactive(
       viewModelBuilder: () => CreatorVM(),
-      onModelReady: ((model) async {
-        model.selectedList = pendantItems;
-        await model.initImages();
+      onModelReady: ((model) {
+        model.selectedItems = pendantItems;
+        model.initImages();
       }),
       builder: (context, viewModel, child) => SafeArea(
         child: Scaffold(
@@ -47,7 +48,10 @@ class Creator extends StatelessWidget {
                 Align(
                     alignment: Alignment.topRight,
                     child: Padding(
-                        padding: const EdgeInsets.all(50), child: RadioWidget())),
+                        padding: const EdgeInsets.all(50),
+                        child: RadioWidget(
+                          viewModel: viewModel,
+                        ))),
               ],
             ),
             Expanded(
@@ -60,24 +64,15 @@ class Creator extends StatelessWidget {
                       width: MediaQuery.of(context).size.width,
                       height: 350,
                       child: CustomRadioButton(
-                        buttonLables: viewModel.selectedList
+                        buttonLables: viewModel.selectedItems
                             .map((e) => e.imageName)
                             .toList(),
-                        buttonValues: viewModel.selectedList,
-                        images: viewModel.selectedImages,
+                        buttonValues: viewModel.selectedItems,
+                        images: viewModel.images,
                         imagesWidth: 80,
                         imagesHeight: 80,
                         radioButtonValue: (value, index) {
-                          viewModel.mainScene.world
-                              .remove(viewModel.selectedPendant.object);
-                          cube.Object scaledObj =
-                              viewModel.createScaledItem(index);
-
-                          viewModel.selectedPendant.object = scaledObj;
-
-                          viewModel.mainScene.world.add(scaledObj);
-
-                          viewModel.mainScene.update();
+                          viewModel.buildScene(index);
                         },
                         enableShape: true,
                         buttonSpace: 5,
