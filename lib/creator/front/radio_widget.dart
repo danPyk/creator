@@ -17,7 +17,7 @@ Color plusColor = Colors.white;
 Color pendantColor = Colors.black;
 
 void updateButtonColor(ItemType? selectQueryType) {
-  if (selectQueryType == ItemType.chain) {
+  if (selectQueryType == ItemType.hair) {
     chainColor = Colors.black;
     pendantColor = Colors.white;
     plusColor = Colors.white;
@@ -27,7 +27,7 @@ void updateButtonColor(ItemType? selectQueryType) {
     chainColor = Colors.white;
     pendantColor = Colors.white;
   }
-  if (selectQueryType == ItemType.pendant) {
+  if (selectQueryType == ItemType.head) {
     pendantColor = Colors.black;
     chainColor = Colors.white;
     plusColor = Colors.white;
@@ -57,7 +57,7 @@ class RadioWidgetState extends State<RadioWidget> {
               RadioButton(
                 'Pendant',
                 () {
-                  widget.viewModel.setItemType(ItemType.pendant);
+                  widget.viewModel.setItemType(ItemType.head);
 
                   updateButtonColor(widget.viewModel.selectedItemType);
                   widget.viewModel
@@ -72,7 +72,7 @@ class RadioWidgetState extends State<RadioWidget> {
                 child: RadioButton(
                   'Chain',
                   () {
-                    widget.viewModel.setItemType(ItemType.chain);
+                    widget.viewModel.setItemType(ItemType.hair);
                     updateButtonColor(widget.viewModel.selectedItemType);
                     widget.viewModel
                         .updateElementsList(widget.viewModel.selectedItemType);

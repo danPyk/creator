@@ -1,0 +1,26 @@
+# Blender MTL File: "lego head's droid.blend"
+# Material Count: 2
+
+newmtl Material004
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.630588 0.351941 0.073889
+Ks 0.449020 0.449020 0.449020
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd pendant.jpg
+
+
+newmtl Material017
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.787451 0.721569 0.470588
+Ks 0.449020 0.449020 0.449020
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd pendant.jpg
+

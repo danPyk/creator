@@ -17,7 +17,7 @@ class Creator extends StatelessWidget {
     return ViewModelBuilder<CreatorVM>.reactive(
       viewModelBuilder: () => CreatorVM(),
       onModelReady: ((model) {
-        model.selectedItems = pendantItems;
+        model.selectedItems = headsItems;
         model.initImages();
       }),
       builder: (context, viewModel, child) => SafeArea(
@@ -39,7 +39,13 @@ class Creator extends StatelessWidget {
                           onSceneCreated: (Scene scene) {
                             viewModel.mainScene = scene;
 
-                            scene.world.add(viewModel.selectedPendant.object);
+                            Item object = viewModel.createItemBasedOnPrevious(0);
+                            viewModel.selectedElement = object;
+                            viewModel.previousSelectedElement = object;
+
+                            loadTexture(cube.Material(), 'assets/elements/pendants/6.mtl');
+                            scene.world.add(object.object);
+                            //viewModel.mainScene.world.updateTransform();
                           },
                         )),
                   ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cube/flutter_cube.dart' as cube;
 
 
-enum ItemType { chain, plus, pendant }
+enum ItemType { hair, plus, head }
 
 
 class Item {

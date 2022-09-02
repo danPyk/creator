@@ -11,7 +11,7 @@ class CreatorVM extends ChangeNotifier {
   late cube.Scene mainScene;
 
   late Item _selectedChain = Item(
-      type: ItemType.chain,
+      type: ItemType.hair,
       fileName: 'assets/elements/chain/11788_Necklace_l2.obj',
       object:
           cube.Object(fileName: 'assets/elements/chain/11788_Necklace_l2.obj'),
@@ -24,26 +24,17 @@ class CreatorVM extends ChangeNotifier {
     _selectedChain = selectedChain;
   }
 
-  late Item _selectedPendant = Item(
-      type: ItemType.pendant,
-      fileName: 'assets/elements/pendants/11797_Pendant_v1_l2.obj',
-      object: cube.Object(
-          fileName: 'assets/elements/pendants/11797_Pendant_v1_l2.obj'),
-      scale: 5,
-      imageName: 'assets/elements/chain2.png');
-
-  Item get selectedPendant => _selectedPendant;
-
-  set selectedPendant(Item selectedPendant) {
-    _selectedPendant = selectedPendant;
-  }
+  late Item selectedElement;
+  ///used to set new element in place of previous
+  late Item previousSelectedElement = headsItems.first;
 
   ///construct new Object with proper scale and position
   Item createItemBasedOnPrevious(int index) {
     cube.Object object = cube.Object(
         fileName: selectedItems[index].fileName,
         scale: selectedItems[index].object.scale * selectedItems[index].scale,
-        position: selectedItems[index].object.position);
+        position: selectedItems[index].object.position,
+        rotation: previousSelectedElement.object.rotation);
 
     return Item(
         type: selectedItems[index].type,
@@ -54,7 +45,7 @@ class CreatorVM extends ChangeNotifier {
   }
 
   void buildScene(int index) {
-    if (selectedItems[index].type != ItemType.pendant) {
+    if (selectedItems[index].type != ItemType.head) {
       mainScene.world.remove(selectedChain.object);
       Item scaledObj = createItemBasedOnPrevious(index);
       selectedChain = scaledObj;
@@ -63,10 +54,12 @@ class CreatorVM extends ChangeNotifier {
 
       mainScene.update();
     } else {
-      mainScene.world.remove(selectedPendant.object);
+      mainScene.world.remove(selectedElement.object);
+      mainScene.update();
+
       Item scaledObj = createItemBasedOnPrevious(index);
 
-      selectedPendant = scaledObj;
+      selectedElement = scaledObj;
 
       mainScene.world.add(scaledObj.object);
 
@@ -74,7 +67,7 @@ class CreatorVM extends ChangeNotifier {
     }
   }
 
-  //make lists static
+  //todo make lists static
   void initImages() {
     List<Image>? list =
         selectedItems.map((e) => Image.asset(e.imageName)).toList();
@@ -88,16 +81,16 @@ class CreatorVM extends ChangeNotifier {
   }
 
   void updateElementsList(ItemType? selectQueryType) {
-    if (selectQueryType == ItemType.chain) {
-      selectedItems = chainItems;
+    if (selectQueryType == ItemType.hair) {
+      selectedItems = hairsItems;
     }
 
     if (selectQueryType == ItemType.plus) {
       selectedItems = plusItems;
     }
 
-    if (selectQueryType == ItemType.pendant) {
-      selectedItems = pendantItems;
+    if (selectQueryType == ItemType.head) {
+      selectedItems = headsItems;
     }
   }
 }
