@@ -1,5 +1,6 @@
 import 'package:creator/creator/back/item.dart';
 import 'package:creator/creator/back/items_lists.dart';
+import 'package:creator/creator/front/radio_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cube/flutter_cube.dart' as cube;
 
@@ -7,10 +8,12 @@ class CreatorVM extends ChangeNotifier {
   late List<Item> selectedItems;
   late List<Image>? images;
 
-  late ItemType selectedItemType;
   late cube.Scene mainScene;
 
-  late Item _selectedChain = Item(
+  ItemType selectedGroupOfObjects = ItemType.head;
+  List<String> selectedGroupOfObjectsLabels = ["Head", "Hair", "Plus"];
+
+  late Item selectedChain = Item(
       type: ItemType.hair,
       fileName: 'assets/elements/chain/11788_Necklace_l2.obj',
       object:
@@ -18,13 +21,8 @@ class CreatorVM extends ChangeNotifier {
       scale: 5,
       imageName: 'assets/elements/chain2.png');
 
-  Item get selectedChain => _selectedChain;
+  late Item selectedItem;
 
-  set selectedChain(Item selectedChain) {
-    _selectedChain = selectedChain;
-  }
-
-  late Item selectedElement;
   ///used to set new element in place of previous
   late Item previousSelectedElement = headsItems.first;
 
@@ -54,12 +52,12 @@ class CreatorVM extends ChangeNotifier {
 
       mainScene.update();
     } else {
-      mainScene.world.remove(selectedElement.object);
+      mainScene.world.remove(selectedItem.object);
       mainScene.update();
 
       Item scaledObj = createItemBasedOnPrevious(index);
 
-      selectedElement = scaledObj;
+      selectedItem = scaledObj;
 
       mainScene.world.add(scaledObj.object);
 
@@ -74,12 +72,6 @@ class CreatorVM extends ChangeNotifier {
     images = list;
   }
 
-  void setItemType(ItemType newEnum) {
-    selectedItemType = newEnum;
-
-    notifyListeners();
-  }
-
   void updateElementsList(ItemType? selectQueryType) {
     if (selectQueryType == ItemType.hair) {
       selectedItems = hairsItems;
@@ -92,5 +84,53 @@ class CreatorVM extends ChangeNotifier {
     if (selectQueryType == ItemType.head) {
       selectedItems = headsItems;
     }
+    notifyListeners();
+  }
+
+  void moveObjectXLeft() {
+    selectedItem.object.position.setValues(selectedItem.object.position.x + 0.5,
+        selectedItem.object.position.y, selectedItem.object.position.z);
+
+    selectedItem.object.updateTransform();
+  }
+
+  void moveObjectXRight() {
+    selectedItem.object.position.setValues(selectedItem.object.position.x - 0.5,
+        selectedItem.object.position.y, selectedItem.object.position.z);
+
+    selectedItem.object.updateTransform();
+  }
+
+  void moveObjectYLeft() {
+    selectedItem.object.position.setValues(selectedItem.object.position.x,
+        selectedItem.object.position.y + 0.5, selectedItem.object.position.z);
+
+    selectedItem.object.updateTransform();
+  }
+
+  void moveObjectYRight() {
+    selectedItem.object.position.setValues(selectedItem.object.position.x,
+        selectedItem.object.position.y - 0.5, selectedItem.object.position.z);
+
+    selectedItem.object.updateTransform();
+  }
+
+  void moveObjectZLeft() {
+    selectedItem.object.position.setValues(selectedItem.object.position.x,
+        selectedItem.object.position.y, selectedItem.object.position.z + 0.5);
+
+    selectedItem.object.updateTransform();
+  }
+
+  void moveObjectZRight() {
+    selectedItem.object.position.setValues(selectedItem.object.position.x,
+        selectedItem.object.position.y, selectedItem.object.position.z - 0.5);
+
+    selectedItem.object.updateTransform();
+  }
+
+  int findElementIndexBaseOnFilename() {
+    return selectedItems
+        .indexWhere((element) => element.fileName == selectedItem.fileName);
   }
 }

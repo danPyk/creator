@@ -3,11 +3,16 @@ import 'package:flutter/material.dart';
 
 class RadioButton extends StatefulWidget {
   final String text;
-  final Function onPressed;
+  final void onPressed;
   final double? minWidth;
-  final Color? color;
+  bool enabled;
 
-  const RadioButton(this.text, this.onPressed, {Key? key, this.minWidth, this.color}) : super(key: key);
+  RadioButton(
+    this.text,
+    this.onPressed, {
+    Key? key,
+    this.minWidth,
+  }) : enabled = false;
 
   @override
   State<StatefulWidget> createState() => _RadioButtonState();
@@ -17,6 +22,7 @@ class _RadioButtonState extends State<RadioButton>
     with SingleTickerProviderStateMixin {
   double? _scale;
   AnimationController? _controller;
+  Color color = Colors.white;
 
   @override
   void initState() {
@@ -28,8 +34,8 @@ class _RadioButtonState extends State<RadioButton>
       lowerBound: 0.0,
       upperBound: 0.05,
     )..addListener(() {
-      setState(() {});
-    });
+        setState(() {});
+      });
     super.initState();
   }
 
@@ -41,6 +47,8 @@ class _RadioButtonState extends State<RadioButton>
 
   @override
   Widget build(BuildContext context) {
+    var enableState = widget.enabled;
+
     _scale = 1.0 - _controller!.value;
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -52,7 +60,11 @@ class _RadioButtonState extends State<RadioButton>
           ),
         ),
         child: GestureDetector(
-          onTap: widget.onPressed as void Function(),
+          onTap: () {
+            enableState = !enableState;
+
+            widget.onPressed as void Function();
+          },
           onTapDown: _tapDown,
           onTapUp: _tapUp,
           onTapCancel: () => {
@@ -63,10 +75,10 @@ class _RadioButtonState extends State<RadioButton>
               }
           },
           child: Material(
-            color: widget.color,
+            color: getColor(),
             borderRadius: BorderRadius.circular(20.0),
             child: InkWell(
-              onTap: widget.onPressed as void Function(),
+              onTap: () => widget.onPressed ,
               borderRadius: BorderRadius.circular(20.0),
               child: Transform.scale(
                 scale: _scale,
@@ -87,7 +99,8 @@ class _RadioButtonState extends State<RadioButton>
         child: Text(
           widget.text,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.blue),
+          style: const TextStyle(
+              fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.blue),
         ),
       ),
     );
@@ -99,5 +112,16 @@ class _RadioButtonState extends State<RadioButton>
 
   void _tapUp(TapUpDetails details) {
     _controller?.reverse();
+  }
+
+  Color getColor() {
+    setState(() {
+      if (widget.enabled == true) {
+        color = Colors.white;
+      } else {
+        color = Colors.black;
+      }
+    });
+    return color;
   }
 }
