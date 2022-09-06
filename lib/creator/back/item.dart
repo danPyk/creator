@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cube/flutter_cube.dart' as cube;
 
 
-enum ItemType { hair, plus, head }
+enum ItemType { hair, addons, head }
 
 
 class Item {
@@ -13,8 +13,6 @@ class Item {
    final String imageName;
 
 
-
-  const Item.immutable({required this.type, required this.fileName, required this.object,  required this.scale, required this.imageName});
 
    Item({required this.type, required this.fileName, required this.object,  required this.scale, required this.imageName});
 }

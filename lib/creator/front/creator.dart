@@ -1,7 +1,5 @@
 import 'package:creator/creator/back/item.dart';
-import 'package:creator/creator/front/radio_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cube/flutter_cube.dart' as cube;
 import 'package:stacked/stacked.dart';
 import 'package:radio_grouped_buttons/radio_grouped_buttons.dart';
 import 'package:flutter_cube/flutter_cube.dart';
@@ -18,12 +16,16 @@ class Creator extends StatelessWidget {
       viewModelBuilder: () => CreatorVM(),
       onModelReady: ((model) {
         model.selectedItems = headsItems;
-        model.initImages();
+        model.extractImages();
       }),
       builder: (context, viewModel, child) => SafeArea(
         child: Scaffold(
             body: Column(
           children: [
+            Text(
+              viewModel.selectedHead.object.position.toString(),
+              style: const TextStyle(fontSize: 22.0),
+            ),
             Row(
               children: [
                 Align(
@@ -32,22 +34,18 @@ class Creator extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8, top: 8, bottom: 8),
                     child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.7,
-                        width: 400,
+                        width: MediaQuery.of(context).size.height * 0.4,
 
-                        //todo loading spinning
                         child: Cube(
                           onSceneCreated: (Scene scene) {
                             viewModel.mainScene = scene;
-
+                            ///initial image need to be rendered with proper scale
                             Item object =
-                                viewModel.createItemBasedOnPrevious(0);
-                            viewModel.selectedItem = object;
+                                viewModel.createItem(0);
+                            viewModel.selectedHead = object;
                             viewModel.previousSelectedElement = object;
 
-                            loadTexture(cube.Material(),
-                                'assets/elements/pendants/6.mtl');
                             scene.world.add(object.object);
-                            //viewModel.mainScene.world.updateTransform();
                           },
                         )),
                   ),
@@ -79,11 +77,11 @@ class Creator extends StatelessWidget {
                                 }
                                 if (index == 2) {
                                   viewModel.selectedGroupOfObjects =
-                                      ItemType.plus;
+                                      ItemType.addons;
                                 }
                                 viewModel.updateElementsList(
                                     viewModel.selectedGroupOfObjects);
-                                viewModel.initImages();
+                                viewModel.extractImages();
                               },
                               enableShape: true,
                               buttonSpace: 5,
@@ -96,7 +94,7 @@ class Creator extends StatelessWidget {
                         )),
                     Row(
                       children: [
-                        Text('X'),
+                        const Text('X'),
                         IconButton(
                           icon: const Icon(Icons.add),
                           onPressed: () => viewModel.moveObjectXLeft(),
@@ -106,9 +104,10 @@ class Creator extends StatelessWidget {
                           onPressed: () => viewModel.moveObjectXRight(),
                         ),
                       ],
-                    ),      Row(
+                    ),
+                    Row(
                       children: [
-                        Text('Y'),
+                        const Text('Y'),
                         IconButton(
                           icon: const Icon(Icons.add),
                           onPressed: () => viewModel.moveObjectYLeft(),
@@ -118,19 +117,30 @@ class Creator extends StatelessWidget {
                           onPressed: () => viewModel.moveObjectYRight(),
                         ),
                       ],
-                    ),      Row(
+                    ),
+                    Row(
                       children: [
-                        Text('Z'),
+                        const Text('Z'),
                         IconButton(
                           icon: const Icon(Icons.add),
                           onPressed: () => viewModel.moveObjectZLeft(),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.abc_outlined),
+                          icon: const Icon(Icons.density_large),
                           onPressed: () => viewModel.moveObjectZRight(),
                         ),
                       ],
+                    ),     Row(
+                      children: [
+                        const Text('Save'),
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () async => await viewModel.saveScene(),
+                        ),
+              
+                      ],
                     ),
+
                     // IconButton( icon: Icon(Icons.abc), onPressed: ,),
                   ],
                 ),
